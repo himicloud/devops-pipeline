@@ -1,0 +1,18 @@
+---
+- hosts: all
+  become: yes
+  tasks:
+    - name: Ensure all packages are up to date
+      yum:
+        name: "*"
+        state: latest
+        update_cache: yes
+
+    - name: Copy provisioner script
+      copy:
+        src: provisioner.sh
+        dest: /tmp/provisioner.sh
+        mode: '0755'
+
+    - name: Execute provisioner script
+      shell: /tmp/provisioner.sh
