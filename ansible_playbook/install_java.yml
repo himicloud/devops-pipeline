@@ -1,0 +1,13 @@
+---
+- name: Install Java and Set Java Home on Ubuntu
+  hosts: jenkins
+  become: yes  # To run commands as sudo
+
+  tasks:
+    - name: Install OpenJDK
+      apt:
+        name: openjdk-11-jdk
+        state: present
+
+    
+
