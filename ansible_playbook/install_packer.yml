@@ -1,0 +1,35 @@
+---
+- name: Install Packer on Ubuntu
+  hosts: jenkins
+  become: yes
+  tasks:
+    - name: Update apt packages
+      apt:
+        update_cache: yes
+        upgrade: dist
+
+    - name: Install required dependencies
+      apt:
+        name:
+          - unzip
+        state: present
+
+    - name: Download Packer
+      get_url:
+        url: "https://releases.hashicorp.com/packer/1.11.0/packer_1.11.0_linux_amd64.zip"
+        dest: "/tmp/packer.zip"
+        mode: '0755'
+
+    - name: Unzip Packer
+      unarchive:
+        src: "/tmp/packer.zip"
+        dest: "/usr/local/bin"
+        remote_src: yes
+
+    - name: Verify Packer installation
+      command: "packer version"
+      register: packer_version
+
+    - name: Display Packer version
+      debug:
+        msg: "Packer version installed: {{ packer_version.stdout }}"
